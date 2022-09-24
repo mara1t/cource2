@@ -9,6 +9,8 @@ set (SOURCES test/complex_test.cpp src/complex.cpp)
 
 add_executable (${PROJECT_NAME} ${SOURCES})
 
+target_include_directories (${PROJECT_NAME} PRIVATE include)
+
 add_compile_options (-Werror -Wall -Wextra -Wpedantic)
 
 #enable_testing()
