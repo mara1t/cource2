@@ -1,5 +1,9 @@
 #include "complex.h"
 
+bool complex::complex_num::is_valid() const 
+{
+    return Re == Re && Im == Im;
+}
 
 bool complex::complex_num::is_zero() const
 {

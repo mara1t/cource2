@@ -26,6 +26,7 @@ struct complex_num {
     bool operator > (const complex_num &num1) const;
     bool operator < (const complex_num &num1) const;
 
+    bool is_valid() const;
     bool is_zero() const;
     void print_num() const;
     
