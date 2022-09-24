@@ -5,7 +5,7 @@ project(complex)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set (SOURCES src/main.cpp)
+set (SOURCES test/main.cpp)
 
 add_executable (${PROJECT_NAME} ${SOURCES})
 
