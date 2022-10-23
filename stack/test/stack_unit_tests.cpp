@@ -2,6 +2,8 @@
 #include "stack.h"
 #include <gtest/gtest.h>
 
+static const int size_for_test = 10000;
+
 TEST(StackTest, test1) {
     stack::Stack_t<int> mystack{};
     mystack.push(1);
@@ -48,6 +50,30 @@ TEST(StackTest, test6) {
     mystack.push(0);
     mystack.push(1);
     EXPECT_EQ(sizeof(int) * 8, mystack.get_capacity());
+}
+
+TEST(StackTest, test7) {
+    stack::Stack_t<int> mystack{};
+    for (int iter = 0; iter < size_for_test; iter++) {
+        mystack.push(2 * iter);
+    }
+    EXPECT_EQ(size_for_test, mystack.get_size());
+}
+
+TEST(StackTest, test8) {
+    stack::Stack_t<bool> mystack{};
+    for (int iter = 0; iter < size_for_test; iter++) {
+        mystack.push(iter % 2);
+    }
+    EXPECT_EQ(size_for_test, mystack.get_size());
+}
+
+TEST(StackTest, test9) {
+    stack::Stack_t<bool> mystack{};
+    for (int iter = 0; iter < size_for_test; iter++) {
+        mystack.push(iter % 2);
+    }
+    EXPECT_EQ(size_for_test, mystack.get_size());
 }
 
 int main(int argc, char** argv) {

@@ -1,8 +1,11 @@
 #pragma once
 
+#include <cstring>
 #include <cstddef>
 #include <iostream>
 #include <string.h>
+
+
 
 namespace stack {
 
@@ -38,7 +41,7 @@ template <typename Type>
 Stack_t<Type>::Stack_t(const Stack_t & stack2) : size_{stack2.size_}, capacity_{stack2.capacity_}
 {
     arr_ = new Type[capacity_];
-    memcpy(arr_, stack2.arr_, sizeof(stack2.arr_));
+    std::memcpy(arr_, stack2.arr_, stack2.size_ * sizeof(Type));
 }
 
 template <typename Type>
@@ -63,7 +66,7 @@ void Stack_t<Type>::push(const Type & new_elem)
     }
     else if (size_ == capacity_) {
         Type *new_arr = new Type[capacity_ * 2];
-        memcpy(new_arr, arr_, size_ * sizeof(Type));
+        std::memcpy(new_arr, arr_, size_ * sizeof(Type));
         delete [] arr_;
         arr_ = new_arr;
         capacity_ *= 2;
@@ -81,7 +84,7 @@ Type Stack_t<Type>::pop()
     }
     if (size_ < (capacity_ / 2) && (capacity_ / 2 ) > 5) {
         Type *new_arr = new Type[capacity_ / 2];
-        memcpy(new_arr, arr_, size_ * sizeof(Type));
+        std::memcpy(new_arr, arr_, size_ * sizeof(Type));
         delete [] arr_;
         arr_ = new_arr;
         capacity_ /=  2;
@@ -121,7 +124,7 @@ Stack_t<Type> Stack_t<Type>::operator = (const Stack_t &stack2)
         delete [] arr_;
     
     arr_ = new Type[stack2.capacity_];
-    memcpy(arr_, stack2.arr_, stack2.size_ * sizeof(Type));
+    std::memcpy(arr_, stack2.arr_, stack2.size_ * sizeof(Type));
     size_ = stack2.size_;
     capacity_ = stack2.capacity_;
 

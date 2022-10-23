@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring>
+//#include <iostream>
 #include <cstddef>
 #include "stack.h"
 
@@ -41,7 +43,7 @@ private:
 Stack_t<bool>::Stack_t(const Stack_t & stack2) : size_{stack2.size_}, capacity_{stack2.capacity_}
 {
     arr_ = new int [capacity_ / INT_BIT + 1];
-    memcpy(arr_, stack2.arr_, (size_ / INT_BIT + 1) * sizeof(int));
+    std::memcpy(arr_, stack2.arr_, (size_ / INT_BIT + ((stack2.size_ % INT_BIT) != 0)) * sizeof(int));
 }
 
 
@@ -65,7 +67,7 @@ void Stack_t<bool>::push(const bool new_elem)
     }
     else if (size_ == capacity_) {
         int *new_arr = new int[capacity_ / INT_BIT * 2];
-        memcpy(new_arr, arr_, (size_ / INT_BIT + 1) * sizeof(int));
+        std::memcpy(new_arr, arr_, (size_ / INT_BIT + ((size_ % INT_BIT) != 0)) * sizeof(int));
         delete [] arr_;
         arr_ = new_arr;
         capacity_ *= 2;
@@ -89,7 +91,7 @@ bool Stack_t<bool>::pop()
     }
     if (size_ < capacity_ / 2 && capacity_ / 2 > INT_BIT) {
         int *new_arr = new int[capacity_ / INT_BIT / 2];
-        memcpy(new_arr, arr_, (size_ / INT_BIT + 1) * sizeof(int));
+        std::memcpy(new_arr, arr_, (size_ / INT_BIT + ((size_ % INT_BIT) != 0)) * sizeof(int));
         delete [] arr_;
         arr_ = new_arr;
         capacity_ /=  2;
@@ -129,7 +131,7 @@ Stack_t<bool> Stack_t<bool>::operator = (const Stack_t &stack2)
         delete [] arr_;
     
     arr_ = new int[stack2.capacity_ / INT_BIT];
-    memcpy(arr_, stack2.arr_, (stack2.size_ / INT_BIT + 1) * sizeof(int));
+    std::memcpy(arr_, stack2.arr_, (stack2.size_ / INT_BIT + ((stack2.size_ % INT_BIT) != 0)) * sizeof(int));
     size_ = stack2.size_;
     capacity_ = stack2.capacity_;
 
