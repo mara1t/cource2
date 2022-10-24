@@ -1,5 +1,4 @@
 #include "stack_bool.h"
-#include "stack.h"
 #include <gtest/gtest.h>
 
 static const int size_for_test = 10000;
