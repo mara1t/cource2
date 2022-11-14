@@ -3,7 +3,7 @@
 
 static const int size_for_test = 10000;
 
-TEST(StackTest, test1)
+TEST(StackTest, test_pop)
 {
     stack::Stack_t<int> mystack {};
     mystack.push(1);
@@ -12,7 +12,7 @@ TEST(StackTest, test1)
     EXPECT_EQ(3, mystack.pop());
 }
 
-TEST(StackTest, test2)
+TEST(StackTest, test_get_size)
 {
     stack::Stack_t<int> mystack {};
     mystack.push(1);
@@ -21,7 +21,7 @@ TEST(StackTest, test2)
     EXPECT_EQ(3, mystack.get_size());
 }
 
-TEST(StackTest, test3)
+TEST(StackTest, test_capacity)
 {
     stack::Stack_t<int> mystack {};
     mystack.push(1);
@@ -30,7 +30,7 @@ TEST(StackTest, test3)
     EXPECT_EQ(10, mystack.get_capacity());
 }
 
-TEST(StackTest, test4)
+TEST(StackTest, test_bool_pop)
 {
     stack::Stack_t<bool> mystack {};
     mystack.push(1);
@@ -39,7 +39,7 @@ TEST(StackTest, test4)
     EXPECT_EQ(1, mystack.pop());
 }
 
-TEST(StackTest, test5)
+TEST(StackTest, test_bool_size)
 {
     stack::Stack_t<bool> mystack {};
     mystack.push(1);
@@ -48,7 +48,7 @@ TEST(StackTest, test5)
     EXPECT_EQ(3, mystack.get_size());
 }
 
-TEST(StackTest, test6)
+TEST(StackTest, test_bool_capacity)
 {
     stack::Stack_t<bool> mystack {};
     mystack.push(1);
@@ -57,7 +57,7 @@ TEST(StackTest, test6)
     EXPECT_EQ(sizeof(int) * 8, mystack.get_capacity());
 }
 
-TEST(StackTest, test7)
+TEST(StackTest, test_big_size)
 {
     stack::Stack_t<int> mystack {};
     for (int iter = 0; iter < size_for_test; iter++) {
@@ -66,7 +66,7 @@ TEST(StackTest, test7)
     EXPECT_EQ(size_for_test, mystack.get_size());
 }
 
-TEST(StackTest, test8)
+TEST(StackTest, test_bool_big_size)
 {
     stack::Stack_t<bool> mystack {};
     for (int iter = 0; iter < size_for_test; iter++) {
@@ -75,13 +75,13 @@ TEST(StackTest, test8)
     EXPECT_EQ(size_for_test, mystack.get_size());
 }
 
-TEST(StackTest, test9)
+TEST(StackTest, test_pop_last_elem)
 {
-    stack::Stack_t<bool> mystack {};
-    for (int iter = 0; iter < size_for_test; iter++) {
-        mystack.push(iter % 2);
+    stack::Stack_t<int> mystack {};
+    for (int iter = 0; iter <= 1000000; iter++) {
+        mystack.push(iter);
     }
-    EXPECT_EQ(size_for_test, mystack.get_size());
+    EXPECT_EQ(1000000, mystack.pop());
 }
 
 int main(int argc, char **argv)

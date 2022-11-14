@@ -4,8 +4,6 @@
 
 namespace stack {
 
-const unsigned int INT_BIT = 8 * sizeof(int);
-
 template <>
 class Stack_t<bool> {
 public:
@@ -20,8 +18,8 @@ public:
 
     void push(const bool);
     bool pop();
-    size_t get_size() const;
-    size_t get_capacity() const;
+    size_t get_size() const noexcept;
+    size_t get_capacity() const noexcept;
     bool is_empty() const;
     bool is_full() const;
 
@@ -29,6 +27,8 @@ public:
     Stack_t operator=(Stack_t &&);
 
 private:
+    const unsigned int INT_BIT = 8 * sizeof(int);
+
     size_t size_;
     size_t capacity_;
     int *arr_;
@@ -89,12 +89,12 @@ bool Stack_t<bool>::pop()
     return (arr_[size_ / INT_BIT] >> (size_ % INT_BIT)) & 1;
 }
 
-size_t Stack_t<bool>::get_size() const
+size_t Stack_t<bool>::get_size() const noexcept
 {
     return size_;
 }
 
-size_t Stack_t<bool>::get_capacity() const
+size_t Stack_t<bool>::get_capacity() const noexcept
 {
     return capacity_;
 }

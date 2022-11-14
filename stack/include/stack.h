@@ -12,6 +12,7 @@ public:
     {
         arr_ = new Type[10];
     };
+
     Stack_t(const Stack_t &);
     Stack_t(const Stack_t &&);
 
@@ -19,8 +20,8 @@ public:
 
     void push(const Type &);
     Type pop();
-    size_t get_size() const;
-    size_t get_capacity() const;
+    size_t get_size() const noexcept;
+    size_t get_capacity() const noexcept;
     bool is_empty() const;
     bool is_full() const;
 
@@ -89,13 +90,13 @@ Type Stack_t<Type>::pop()
 }
 
 template <typename Type>
-size_t Stack_t<Type>::get_size() const
+size_t Stack_t<Type>::get_size() const noexcept
 {
     return size_;
 }
 
 template <typename Type>
-size_t Stack_t<Type>::get_capacity() const
+size_t Stack_t<Type>::get_capacity() const noexcept
 {
     return capacity_;
 }
@@ -115,6 +116,9 @@ bool Stack_t<Type>::is_full() const
 template <typename Type>
 Stack_t<Type> Stack_t<Type>::operator=(const Stack_t &stack2)
 {
+    if (&stack2 == this)
+        return *this;
+
     if (capacity_ != 0)
         delete[] arr_;
 
@@ -129,6 +133,9 @@ Stack_t<Type> Stack_t<Type>::operator=(const Stack_t &stack2)
 template <typename Type>
 Stack_t<Type> Stack_t<Type>::operator=(Stack_t &&stack2)
 {
+    if (&stack2 == this)
+        return *this;
+
     if (capacity_ != 0)
         delete[] arr_;
 

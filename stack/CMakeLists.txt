@@ -5,6 +5,12 @@ project(stack)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_custom_target(
+    testing
+    COMMAND make all
+    COMMAND ./stack
+)
+
 enable_testing()
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
