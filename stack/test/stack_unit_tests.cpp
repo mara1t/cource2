@@ -180,8 +180,8 @@ TEST(StackTest, test_bool_not_full)
 TEST(StackTest, test_full)
 {
     stack::Stack_t<int> stack;
-    for (int i = 0; i < size_for_test; ++i) {
-        rstack.push(i % 2);
+    for (int i = 0; i < 10; ++i) {
+        stack.push(i);
     }
     ASSERT_EQ(stack.is_full(), 1);
 }
@@ -189,8 +189,8 @@ TEST(StackTest, test_full)
 TEST(StackTest, test_bool_full)
 {
     stack::Stack_t<bool> stack;
-    for (int i = 0; i < size_for_test; ++i) {
-        rstack.push(i % 2);
+    for (int i = 0; i < 8 * sizeof(int); ++i) {
+        stack.push(i % 2);
     }
     ASSERT_EQ(stack.is_full(), 1);
 }
