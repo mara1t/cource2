@@ -1,4 +1,5 @@
 #include <cstring>
+#include <cassert>
 #include <cstddef>
 #include <iostream>
 #include <string.h>
@@ -18,6 +19,7 @@ public:
 
     ~Stack_t();
 
+    void resize(const unsigned int);
     void push(const Type &);
     Type pop();
     Type top();
@@ -46,13 +48,14 @@ class Stack_t<bool> {
 public:
     Stack_t() : size_ {0}, capacity_ {INT_BIT}
     {
-        arr_ = new int[1];
+        arr_ = new int[BASE_CAPACITY];
     };
     Stack_t(const Stack_t &);
     Stack_t(Stack_t &&);
 
     ~Stack_t();
 
+    void resize(const unsigned int);
     void push(const bool);
     bool pop();
     bool top();
@@ -65,6 +68,7 @@ public:
     Stack_t operator=(Stack_t &&);
 
 private:
+    const unsigned int BASE_CAPACITY = 1;
     const unsigned int INT_BIT = 8 * sizeof(int);
 
     size_t size_;
@@ -77,7 +81,7 @@ template <typename Type>
 Stack_t<Type>::Stack_t(const Stack_t &stack2) : size_ {stack2.size_}, capacity_ {stack2.capacity_}
 {
     arr_ = new Type[capacity_];
-    std::memcpy(arr_, stack2.arr_, stack2.size_ * sizeof(Type));
+    std::copy(stack2.arr_, stack2.arr_ + stack2.size_, arr_);
 }
 
 template <typename Type>
@@ -93,17 +97,21 @@ Stack_t<Type>::~Stack_t()
 }
 
 template <typename Type>
+void Stack_t<Type>::resize(const unsigned int new_capacity)
+{
+    assert(size_ <= new_capacity);
+    Type *new_arr = new Type[new_capacity];
+    std::copy(arr_, arr_ + size_, new_arr);
+    delete[] arr_;
+    arr_ = new_arr;
+    capacity_ = new_capacity;
+}
+
+template <typename Type>
 void Stack_t<Type>::push(const Type &new_elem)
 {
-    if (capacity_ == 0) {
-        arr_ = new Type[BASE_CAPACITY];
-    } else if (size_ == capacity_) {
-        Type *new_arr = new Type[capacity_ * 2];
-        std::copy(arr_, arr_ + size_, new_arr);
-        delete[] arr_;
-        arr_ = new_arr;
-        capacity_ *= 2;
-    }
+    if (size_ == capacity_)
+        resize(capacity_ * 2);
 
     arr_[size_] = new_elem;
     size_++;
@@ -112,13 +120,8 @@ void Stack_t<Type>::push(const Type &new_elem)
 template <typename Type>
 Type Stack_t<Type>::pop()
 {
-    if (size_ < (capacity_ / 2) && capacity_ > BASE_CAPACITY) {
-        Type *new_arr = new Type[capacity_ / 2];
-        std::copy(arr_, arr_ + size_, new_arr);
-        delete[] arr_;
-        arr_ = new_arr;
-        capacity_ /= 2;
-    }
+    if (size_ < (capacity_ / 2) && capacity_ > BASE_CAPACITY)
+        resize(capacity_ / 2);
 
     size_--;
     return arr_[size_];
@@ -200,17 +203,21 @@ Stack_t<bool>::~Stack_t()
     delete[] arr_;
 }
 
+void Stack_t<bool>::resize(const unsigned int new_capacity)
+{
+    assert(size_ < new_capacity);
+    int *new_arr = new int[new_capacity / INT_BIT];
+    std::copy(arr_, arr_ + (size_ / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
+    delete[] arr_;
+    arr_ = new_arr;
+    capacity_ = new_capacity;
+}
+
 void Stack_t<bool>::push(const bool new_elem)
 {
-    if (capacity_ == 0) {
-        arr_ = new int[1];
-    } else if (size_ == capacity_) {
-        int *new_arr = new int[capacity_ / INT_BIT * 2];
-        std::copy(arr_, arr_ + (size_ / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
-        delete[] arr_;
-        arr_ = new_arr;
-        capacity_ *= 2;
-    }
+    
+    if (size_ == capacity_) 
+        resize(capacity_ * 2);
 
     if (new_elem == 1) {
         arr_[size_ / INT_BIT] = arr_[size_ / INT_BIT] | (1 << (size_ % INT_BIT));
@@ -226,13 +233,8 @@ bool Stack_t<bool>::pop()
     if (size_ == 0) {
         return -1;
     }
-    if (size_ < capacity_ / 2 && capacity_ / 2 > INT_BIT) {
-        int *new_arr = new int[capacity_ / INT_BIT / 2];
-        std::copy(arr_, arr_ + (size_ / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
-        delete[] arr_;
-        arr_ = new_arr;
-        capacity_ /= 2;
-    }
+    if (size_ < capacity_ / 2 && capacity_ / 2 > INT_BIT)
+        resize(capacity_ / 2);
 
     size_--;
     return (arr_[size_ / INT_BIT] >> (size_ % INT_BIT)) & 1;
