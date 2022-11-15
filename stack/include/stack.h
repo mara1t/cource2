@@ -205,7 +205,7 @@ Stack_t<bool>::~Stack_t()
 
 void Stack_t<bool>::resize(const unsigned int new_capacity)
 {
-    assert(size_ < new_capacity);
+    assert(size_ <= new_capacity);
     int *new_arr = new int[new_capacity / INT_BIT];
     std::copy(arr_, arr_ + (size_ / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
     delete[] arr_;
