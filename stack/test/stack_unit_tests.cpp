@@ -98,27 +98,28 @@ TEST(StackTest, test_pop_last_elem)
     EXPECT_EQ(1000000, mystack.pop());
 }
 
-TEST(StackTest, test_pop_all_elem)
+TEST(StackTest, test_big_data_pop_all_elem)
 {
     stack::Stack_t<int> mystack {};
-    for (int iter = 0; iter <= 1000000; iter++) {
+    for (int iter = 0; iter <= 100000000; iter++) {
         mystack.push(iter);
     }
-    for (int iter = 1000000; iter >= 0; iter--) {
+    for (int iter = 100000000; iter >= 0; iter--) {
         ASSERT_EQ(mystack.pop(), iter);
     }
 }
 
-TEST(StackTest, test_bool_pop_all_elem)
+TEST(StackTest, test_big_data_bool_pop_all_elem)
 {
     stack::Stack_t<bool> mystack {};
-    for (int iter = 0; iter <= 1000000; iter++) {
+    for (int iter = 0; iter <= 100000000; iter++) {
         mystack.push(iter % 2);
     }
-    for (int iter = 1000000; iter >= 0; iter--) {
+    for (int iter = 100000000; iter >= 0; iter--) {
         ASSERT_EQ(mystack.pop(), iter % 2);
     }
 }
+
 
 TEST(StackTest, test_copy_lvalue)
 {
