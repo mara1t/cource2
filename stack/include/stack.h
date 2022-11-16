@@ -101,9 +101,11 @@ template <typename Type>
 void Stack_t<Type>::resize(const size_t new_capacity)
 {
     Type *new_arr = new Type[new_capacity];
-    std::copy(arr_, arr_ + std::min(size_, new_capacity), new_arr);
+    const size_t new_size = std::min(size_, new_capacity);
+    std::copy(arr_, arr_ + new_size, new_arr);
     delete[] arr_;
     arr_ = new_arr;
+    size_ = new_size;
     capacity_ = new_capacity;
 }
 
@@ -206,9 +208,11 @@ Stack_t<bool>::~Stack_t()
 void Stack_t<bool>::resize(const size_t new_capacity)
 {
     int *new_arr = new int[new_capacity / INT_BIT];
-    std::copy(arr_, arr_ + (std::min(size_, new_capacity) / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
+    const size_t new_size = std::min(size_, new_capacity);
+    std::copy(arr_, arr_ + (new_size / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
     delete[] arr_;
     arr_ = new_arr;
+    size_ = new_size;
     capacity_ = new_capacity;
 }
 
