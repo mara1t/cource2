@@ -9,7 +9,9 @@ TEST(StackTest, test_pop)
     mystack.push(1);
     mystack.push(2);
     mystack.push(3);
-    EXPECT_EQ(3, mystack.pop());
+    ASSERT_EQ(3, mystack.pop());
+    ASSERT_EQ(2, mystack.pop());
+    ASSERT_EQ(1, mystack.pop());
 }
 
 TEST(StackTest, test_get_size)
@@ -18,7 +20,10 @@ TEST(StackTest, test_get_size)
     mystack.push(1);
     mystack.push(2);
     mystack.push(3);
-    EXPECT_EQ(3, mystack.get_size());
+    ASSERT_EQ(3, mystack.get_size());
+    ASSERT_EQ(3, mystack.pop());
+    ASSERT_EQ(2, mystack.pop());
+    ASSERT_EQ(1, mystack.pop());
 }
 
 TEST(StackTest, test_capacity)
@@ -27,7 +32,10 @@ TEST(StackTest, test_capacity)
     mystack.push(1);
     mystack.push(2);
     mystack.push(3);
-    EXPECT_EQ(10, mystack.get_capacity());
+    ASSERT_EQ(10, mystack.get_capacity());
+    ASSERT_EQ(3, mystack.pop());
+    ASSERT_EQ(2, mystack.pop());
+    ASSERT_EQ(1, mystack.pop());
 }
 
 TEST(StackTest, test_bool_pop)
@@ -36,8 +44,11 @@ TEST(StackTest, test_bool_pop)
     mystack.push(1);
     mystack.push(0);
     mystack.push(1);
-    EXPECT_EQ(1, mystack.pop());
+    ASSERT_EQ(1, mystack.pop());
+    ASSERT_EQ(0, mystack.pop());
+    ASSERT_EQ(1, mystack.pop());
 }
+
 
 TEST(StackTest, test_bool_size)
 {
@@ -46,6 +57,9 @@ TEST(StackTest, test_bool_size)
     mystack.push(1);
     mystack.push(1);
     EXPECT_EQ(3, mystack.get_size());
+    ASSERT_EQ(1, mystack.pop());
+    ASSERT_EQ(1, mystack.pop());
+    ASSERT_EQ(1, mystack.pop());
 }
 
 TEST(StackTest, test_bool_capacity)

@@ -1,4 +1,5 @@
 #include <cstring>
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <iostream>
@@ -19,7 +20,7 @@ public:
 
     ~Stack_t();
 
-    void resize(const unsigned int);
+    void resize(const size_t);
     void push(const Type &);
     Type pop();
     Type top();
@@ -55,7 +56,7 @@ public:
 
     ~Stack_t();
 
-    void resize(const unsigned int);
+    void resize(const size_t);
     void push(const bool);
     bool pop();
     bool top();
@@ -68,8 +69,8 @@ public:
     Stack_t operator=(Stack_t &&);
 
 private:
-    const unsigned int BASE_CAPACITY = 1;
-    const unsigned int INT_BIT = 8 * sizeof(int);
+    const size_t BASE_CAPACITY = 1;
+    const size_t INT_BIT = 8 * sizeof(int);
 
     size_t size_;
     size_t capacity_;
@@ -97,11 +98,10 @@ Stack_t<Type>::~Stack_t()
 }
 
 template <typename Type>
-void Stack_t<Type>::resize(const unsigned int new_capacity)
+void Stack_t<Type>::resize(const size_t new_capacity)
 {
-    assert(size_ <= new_capacity);
     Type *new_arr = new Type[new_capacity];
-    std::copy(arr_, arr_ + size_, new_arr);
+    std::copy(arr_, arr_ + std::min(size_, new_capacity), new_arr);
     delete[] arr_;
     arr_ = new_arr;
     capacity_ = new_capacity;
@@ -120,7 +120,7 @@ void Stack_t<Type>::push(const Type &new_elem)
 template <typename Type>
 Type Stack_t<Type>::pop()
 {
-    if (size_ < (capacity_ / 2) && capacity_ > BASE_CAPACITY)
+    if (size_ * 2 < capacity_ && capacity_ > BASE_CAPACITY)
         resize(capacity_ / 2);
 
     size_--;
@@ -203,11 +203,10 @@ Stack_t<bool>::~Stack_t()
     delete[] arr_;
 }
 
-void Stack_t<bool>::resize(const unsigned int new_capacity)
+void Stack_t<bool>::resize(const size_t new_capacity)
 {
-    assert(size_ <= new_capacity);
     int *new_arr = new int[new_capacity / INT_BIT];
-    std::copy(arr_, arr_ + (size_ / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
+    std::copy(arr_, arr_ + (std::min(size_, new_capacity) / INT_BIT + ((size_ % INT_BIT) != 0)), new_arr);
     delete[] arr_;
     arr_ = new_arr;
     capacity_ = new_capacity;
