@@ -1,9 +1,11 @@
 #include "queue.h"
 #include <gtest/gtest.h>
 
-static const int size_for_test = 10000;
+const int size_for_test = 10000;
+const int big_size_for_test = 1000000;
 
-using params = ::testing::Types<queue::queue_t<int>, queue::queue_stck_t<int>>;
+using params = ::testing::Types<queue::queue_t<int>, queue::queue_stck_t<int>, queue::queue_t<double>, queue::queue_stck_t<double>>;
+//using bool_param = 
 
 template <typename T>
 class QueueTest : public ::testing::Test {
@@ -14,64 +16,64 @@ TYPED_TEST_SUITE(QueueTest, params);
 
 TYPED_TEST(QueueTest, test_pop)
 {
-    TypeParam mystack {};
-    mystack.push(1);
-    mystack.push(2);
-    mystack.push(3);
-    ASSERT_EQ(1, mystack.pop());
-    ASSERT_EQ(2, mystack.pop());
-    ASSERT_EQ(3, mystack.pop());
+    TypeParam queue {};
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
+    ASSERT_EQ(1, queue.pop());
+    ASSERT_EQ(2, queue.pop());
+    ASSERT_EQ(3, queue.pop());
 }
 
 TYPED_TEST(QueueTest, test_get_size)
 {
-    TypeParam mystack {};
-    mystack.push(1);
-    mystack.push(2);
-    mystack.push(3);
-    ASSERT_EQ(3, mystack.get_size());
-    ASSERT_EQ(1, mystack.pop());
-    ASSERT_EQ(2, mystack.pop());
-    ASSERT_EQ(3, mystack.pop());
+    TypeParam queue {};
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
+    ASSERT_EQ(3, queue.get_size());
+    ASSERT_EQ(1, queue.pop());
+    ASSERT_EQ(2, queue.pop());
+    ASSERT_EQ(3, queue.pop());
 }
 
 TYPED_TEST(QueueTest, test_capacity)
 {
-    TypeParam mystack {};
-    mystack.push(1);
-    mystack.push(2);
-    mystack.push(3);
-    ASSERT_EQ(1, mystack.pop());
-    ASSERT_EQ(2, mystack.pop());
-    ASSERT_EQ(3, mystack.pop());
+    TypeParam queue {};
+    queue.push(1);
+    queue.push(2);
+    queue.push(3);
+    ASSERT_EQ(1, queue.pop());
+    ASSERT_EQ(2, queue.pop());
+    ASSERT_EQ(3, queue.pop());
 }
 
 TYPED_TEST(QueueTest, test_big_size)
 {
-    TypeParam mystack {};
+    TypeParam queue {};
     for (int iter = 0; iter < size_for_test; iter++) {
-        mystack.push(2 * iter);
+        queue.push(2 * iter);
     }
-    EXPECT_EQ(size_for_test, mystack.get_size());
+    EXPECT_EQ(size_for_test, queue.get_size());
 }
 
 TYPED_TEST(QueueTest, test_pop_last_elem)
 {
-    TypeParam mystack {};
-    for (int iter = 0; iter <= 1000000; iter++) {
-        mystack.push(iter);
+    TypeParam queue {};
+    for (int iter = 0; iter <= big_size_for_test; iter++) {
+        queue.push(iter);
     }
-    EXPECT_EQ(0, mystack.pop());
+    EXPECT_EQ(0, queue.pop());
 }
 
 TYPED_TEST(QueueTest, test_big_data_pop_all_elem)
 {
-    TypeParam mystack {};
-    for (int iter = 0; iter < 1000000; iter++) {
-        mystack.push(iter);
+    TypeParam queue {};
+    for (int iter = 0; iter < big_size_for_test; iter++) {
+        queue.push(iter);
     }
-    for (int iter = 0; iter < 1000000; iter++) {
-        EXPECT_EQ(mystack.pop(), iter);
+    for (int iter = 0; iter < big_size_for_test; iter++) {
+        EXPECT_EQ(queue.pop(), iter);
     }
 }
 
@@ -92,15 +94,26 @@ TYPED_TEST(QueueTest, test_copy_lvalue)
 
 TYPED_TEST(QueueTest, test_empty)
 {
-    TypeParam stack;
-    ASSERT_EQ(stack.is_empty(), 1);
+    TypeParam queue;
+    ASSERT_EQ(queue.is_empty(), 1);
 }
 
 TYPED_TEST(QueueTest, test_not_empty)
 {
-    TypeParam stack;
-    stack.push(1);
-    ASSERT_EQ(stack.is_empty(), 0);
+    TypeParam queue;
+    queue.push(1);
+    ASSERT_EQ(queue.is_empty(), 0);
+}
+
+TEST(BoolQueue, test_big_data_pop_all_elem)
+{
+    queue::queue_stck_t<bool> queue {};
+    for (int iter = 0; iter < big_size_for_test; iter++) {
+        queue.push(iter % 2);
+    }
+    for (int iter = 0; iter < big_size_for_test; iter++) {
+        EXPECT_EQ(queue.pop(), iter % 2);
+    }
 }
 
 int main(int argc, char **argv)

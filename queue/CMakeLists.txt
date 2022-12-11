@@ -5,6 +5,8 @@ project(queue)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Testing
+
 add_custom_target(
     testing
     COMMAND make all
@@ -16,19 +18,22 @@ find_package(GTest REQUIRED)
 
 include_directories(${GTEST_INCLUDE_DIRS})
 
-set (TEST_SOURCES test/queue_unit_tests.cpp)
+set(TEST_SOURCES test/queue_unit_tests.cpp)
+set(STACK_INC_DIR /home/acolyte/Desktop/all_progs/cource2/stack/include)
 
-add_executable (${PROJECT_NAME} ${TEST_SOURCES})
+add_executable(${PROJECT_NAME} ${TEST_SOURCES})
 
-target_include_directories (${PROJECT_NAME} PRIVATE include ../stack/include)
+target_include_directories(${PROJECT_NAME} PRIVATE include ${STACK_INC_DIR})
 target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
 
-add_compile_options (-O2 -Werror -Wall -Wextra -Wpedantic)
+add_compile_options(-O2 -Werror -Wall -Wextra -Wpedantic)
+
+# Benchamrks
 
 find_package(benchmark REQUIRED)
 add_executable (benchmark_test test/queue_benchmark.cpp)
 target_link_libraries(benchmark_test benchmark::benchmark)
-target_include_directories (benchmark_test PRIVATE include ../stack/include)
+target_include_directories (benchmark_test PRIVATE include ${STACK_INC_DIR})
 
 
 # To add:

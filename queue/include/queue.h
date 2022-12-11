@@ -1,13 +1,12 @@
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef INCLUDE_QUEUE_H
+#define INCLUDE_QUEUE_H
 
-#include "../../stack/include/stack.h"
+#include "stack.h"
 #include <cstring>
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <iostream>
-#include <string.h>
 
 namespace queue {
 
@@ -17,13 +16,15 @@ public:
     base_queue() {};
     virtual ~base_queue() {};
 
-    virtual void insert(const Type &, const size_t);
+    virtual void insert(const Type &, const size_t) = 0;
     virtual void push(const Type &) = 0;
     virtual Type pop() = 0;
     virtual Type top() = 0;
-    virtual size_t get_size() const noexcept = 0;
+    virtual size_t get_size() const = 0;
     virtual bool is_empty() const = 0;
 };
+
+//  Queue realization on list
 
 template <typename Type>
 struct node_t {
@@ -31,16 +32,14 @@ struct node_t {
     node_t *next = nullptr;
 };
 
-//  Stack realization on list
-
 template <typename Type>
 class queue_t : public base_queue<Type> {
 public:
     using list_node = node_t<Type>;
 
     queue_t() : base_queue<Type> {} {}
-    queue_t(const queue_t &);
-    queue_t(const queue_t &&);
+    queue_t(const queue_t &) noexcept;
+    queue_t(const queue_t &&) noexcept;
 
     ~queue_t()
     {
@@ -54,7 +53,7 @@ public:
     {
         return head_->value;
     }
-    size_t get_size() const noexcept override
+    size_t get_size() const override
     {
         return size_;
     }
@@ -77,9 +76,9 @@ private:
 template <typename Type>
 class queue_stck_t : public base_queue<Type> {
 public:
-    queue_stck_t() : base_queue<Type> {}, stack_push_ {}, stack_pop_ {} {}
-    queue_stck_t(const queue_stck_t &queue2)
-        : base_queue<Type> {}, size_ {queue2.size_}, stack_push_ {queue2.stack_push_}, stack_pop_ {queue2.stack_pop_}
+    queue_stck_t() noexcept : base_queue<Type> {}, stack_push_ {}, stack_pop_ {}  {}
+    queue_stck_t(const queue_stck_t &queue2) noexcept
+        : base_queue<Type> {}, size_ {queue2.size_}, stack_push_ {queue2.stack_push_}, stack_pop_ {queue2.stack_pop_} 
     {
     }
     queue_stck_t(const queue_stck_t &&queue2)
@@ -93,7 +92,7 @@ public:
     void push(const Type &) override;
     Type pop() override;
     Type top() override;
-    size_t get_size() const noexcept override
+    size_t get_size() const override
     {
         return size_;
     }
@@ -101,7 +100,7 @@ public:
     {
         return size_ == 0;
     }
-
+    
     queue_stck_t operator=(const queue_stck_t &);
     queue_stck_t operator=(const queue_stck_t &&);
 
@@ -116,7 +115,7 @@ private:
 template <typename Type>
 void queue_stck_t<Type>::insert(const Type &new_elem, const size_t pos)
 {
-    queue_stck_t tmp_queue{};
+    queue_stck_t tmp_queue {};
     size_t size = size_;
     for (size_t iter = 0; iter < pos && iter < size; iter++) {
         tmp_queue.push(pop());
@@ -182,10 +181,11 @@ queue_stck_t<Type> queue_stck_t<Type>::operator=(const queue_stck_t &&queue2)
     return *this;
 }
 
+
 //  methods for list queue
 
 template <typename Type>
-queue_t<Type>::queue_t(const queue_t &queue2) : base_queue<Type> {}, size_ {queue2.size_}
+queue_t<Type>::queue_t(const queue_t &queue2) noexcept : base_queue<Type> {}, size_ {queue2.size_} 
 {
     list_node *tmp_node2 = queue2.head_;
     list_node *tmp_new_next_node = nullptr, *tmp_new_prev_node = nullptr;
@@ -207,20 +207,20 @@ queue_t<Type>::queue_t(const queue_t &queue2) : base_queue<Type> {}, size_ {queu
 }
 
 template <typename Type>
-queue_t<Type>::queue_t(const queue_t &&queue2)
-    : base_queue<Type> {}, size_ {queue2.size_}, head_ {queue2.head_}, tail_ {queue2.tail_}
+queue_t<Type>::queue_t(const queue_t &&queue2) noexcept
+    : base_queue<Type> {}, size_ {queue2.size_}, head_ {queue2.head_}, tail_ {queue2.tail_} 
 {
     queue2.head_ = queue2.tail = nullptr;
 }
 
 template <typename Type>
 void queue_t<Type>::insert(const Type &new_elem, const size_t pos)
-{   
+{
     if (pos == size_ - 1)
         push(new_elem);
 
-    node_t<int> *prev_node = head_, *next_node, *new_node = new node_t<int> ;
-    
+    node_t<Type> *prev_node = head_, *next_node, *new_node = new node_t<Type>;
+
     for (size_t iter = 0; iter < pos; iter++) {
         prev_node = prev_node->next;
     }
@@ -254,17 +254,14 @@ Type queue_t<Type>::pop()
     Type ret_value = head_->value;
     list_node *old_head = head_;
     if (size_ == 0) {
-        //delete old_head;
         head_ = tail_ = nullptr;
-    }
-    else {
+    } else {
         head_ = head_->next;
         old_head->next = nullptr;
-        //delete old_head;
     }
-    
+
     delete old_head;
-    
+
     return ret_value;
 }
 
