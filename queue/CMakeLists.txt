@@ -19,11 +19,12 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 set(TEST_SOURCES test/queue_unit_tests.cpp)
-set(STACK_INC_DIR /home/acolyte/Desktop/all_progs/cource2/stack/include)
+
+get_filename_component(MY_CONTAINERS_DIR ${PROJECT_SOURCE_DIR} PATH)
 
 add_executable(${PROJECT_NAME} ${TEST_SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE include ${STACK_INC_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE include ${MY_CONTAINERS_DIR}/stack/include)
 target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
 
 add_compile_options(-O2 -Werror -Wall -Wextra -Wpedantic)
@@ -33,7 +34,7 @@ add_compile_options(-O2 -Werror -Wall -Wextra -Wpedantic)
 find_package(benchmark REQUIRED)
 add_executable (benchmark_test test/queue_benchmark.cpp)
 target_link_libraries(benchmark_test benchmark::benchmark)
-target_include_directories (benchmark_test PRIVATE include ${STACK_INC_DIR})
+target_include_directories (benchmark_test PRIVATE include ${MY_CONTAINERS_DIR}/stack/include)
 
 
 # To add:
