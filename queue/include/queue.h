@@ -76,12 +76,12 @@ private:
 template <typename Type>
 class queue_stck_t : public base_queue<Type> {
 public:
-    queue_stck_t() noexcept : base_queue<Type> {}, stack_push_ {}, stack_pop_ {}  {}
+    queue_stck_t() : base_queue<Type> {}, stack_push_ {}, stack_pop_ {}  {}
     queue_stck_t(const queue_stck_t &queue2) noexcept
         : base_queue<Type> {}, size_ {queue2.size_}, stack_push_ {queue2.stack_push_}, stack_pop_ {queue2.stack_pop_} 
     {
     }
-    queue_stck_t(const queue_stck_t &&queue2)
+    queue_stck_t(const queue_stck_t &&queue2) noexcept
         : base_queue<Type> {}, size_ {queue2.size_}, stack_push_ {queue2.stack_push_}, stack_pop_ {queue2.stack_pop_}
     {
     }
